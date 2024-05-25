@@ -8,33 +8,37 @@ export default function App() {
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
-    async function addMyselfAsGuest() {
+    // POST new guest to the guest list
+    async function addGuestToList() {
       const response = await fetch(`${baseUrl}/guests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          firstName: 'Cornelia',
-          lastName: 'Schenk',
+          firstName: firstName,
+          lastName: lastName,
         }),
       });
       const data = await response.json();
-      console.log('data', data);
+      console.log(data);
     }
-    addMyselfAsGuest().catch((error) => console.log(error));
-  }, []);
+    addGuestToList().catch((error) => console.log(error));
+  }, [guests]);
 
-  async function showGuestList() {
-    const response = await fetch(`${baseUrl}/guests`);
-    const data = await response.json();
-    setGuests(data);
-  }
-  showGuestList().catch((error) => console.log(error));
+  useEffect(() => {
+    // GET all guests from the guest list
+    async function showGuestList() {
+      const response = await fetch(`${baseUrl}/guests`);
+      const data = await response.json();
+      setGuests(data);
+    }
+    showGuestList().catch((error) => console.log(error));
+  }, []);
 
   return (
     <div data-test-id="guest">
-      {/* <form onSubmit={(event) => event.preventDefault()}>
+      <form onSubmit={(event) => event.preventDefault()}>
         <input
           value={firstName}
           onChange={(event) => setFirstName(event.currentTarget.value)}
@@ -44,37 +48,33 @@ export default function App() {
           value={lastName}
           onChange={(event) => setLastName(event.currentTarget.value)}
           onKeyDown={(event) => {
+            const newGuest = {
+              firstName: firstName,
+              lastName: lastName,
+            };
             if (event.key === 'Enter') {
-              const newGuest = {
-                keyId: guests[guests.length - 1].keyId + 1,
-                keyFirstName: firstName,
-                keyLastName: lastName,
-              };
-              const newGuestList = [...guests];
-              newGuestList.push(newGuest);
-              setGuests(newGuestList);
-              setFirstName('');
-              setLastName('');
-              console.log(guests);
+              const newGuestsList = [...guests];
+              newGuestsList.push(newGuest);
+              setGuests(newGuestsList);
             }
           }}
         />
         <label htmlFor="LastName:">Last name</label>
       </form>
-      <button */}
-      {/* onClick=
-      {(event) => {
-        const newGuest = {
-          keyId: guests[guests.length - 1].keyId + 1,
-          keyFirstName: firstName,
-          keyLastName: lastName,
-        };
-        const newGuestList = [...guests];
-        newGuestList.push(newGuest);
-        setGuests(newGuestList);
-        console.log(guests);
-      }}
-      > Add Guest
+      {/* <button
+        onClick={(event) => {
+          const newGuest = {
+            keyId: guests[guests.length - 1].keyId + 1,
+            keyFirstName: firstName,
+            keyLastName: lastName,
+          };
+          const newGuestList = [...guests];
+          newGuestList.push(newGuest);
+          setGuests(newGuestList);
+        }}
+      >
+        {' '}
+        Add Guest
       </button> */}
       <h1>Guest List</h1>
       <div>
