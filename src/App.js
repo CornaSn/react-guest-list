@@ -6,19 +6,23 @@ export default function App() {
   const [guests, setGuests] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isAttending, setIsAttending] = useState(false);
 
   useEffect(() => {
     // POST new guest to the guest list
     async function addGuestToList() {
+      // Variable for the POST request
+      const guestPost = {
+        firstName: firstName,
+        lastName: lastName,
+        attending: false,
+      };
       const response = await fetch(`${baseUrl}/guests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-        }),
+        body: JSON.stringify(guestPost),
       });
       const data = await response.json();
       console.log(data);
@@ -40,11 +44,13 @@ export default function App() {
     <div data-test-id="guest">
       <form onSubmit={(event) => event.preventDefault()}>
         <input
+          id="FirstName"
           value={firstName}
           onChange={(event) => setFirstName(event.currentTarget.value)}
         />
-        <label htmlFor="FirstName:">First name</label>
+        <label htmlFor="FirstName">First name</label>
         <input
+          id="LastName"
           value={lastName}
           onChange={(event) => setLastName(event.currentTarget.value)}
           onKeyDown={(event) => {
@@ -59,7 +65,7 @@ export default function App() {
             }
           }}
         />
-        <label htmlFor="LastName:">Last name</label>
+        <label htmlFor="LastName">Last name</label>
       </form>
       {/* <button
         onClick={(event) => {
@@ -85,7 +91,18 @@ export default function App() {
                 {guest.firstName} {guest.lastName}
               </h2>
               <div>Guests ID: {guest.id}</div>
-              <div>Attending: {guest.attending}</div>
+              <div>
+                <label>
+                  Attending: {guest.attending}
+                  <input
+                    type="checkbox"
+                    checked={isAttending}
+                    onChange={(event) =>
+                      setIsAttending(event.currentTarget.checked)
+                    }
+                  />
+                </label>
+              </div>
             </div>
           );
         })}
