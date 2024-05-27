@@ -8,6 +8,16 @@ export default function App() {
   const [lastName, setLastName] = useState('');
   const [isAttending, setIsAttending] = useState(false);
 
+  // Show whole guest list with GET method
+  useEffect(() => {
+    async function showGuestList() {
+      const response = await fetch(`${baseUrl}/guests`);
+      const data = await response.json();
+      setGuestList(data);
+    }
+    showGuestList().catch((error) => console.log(error));
+  }, []);
+
   // Add new guest to List with POST method
   async function addGuestToList() {
     // Variable for the POST request
@@ -27,58 +37,53 @@ export default function App() {
     const newGuestList = [...guestList];
     newGuestList.push(data);
     setGuestList(newGuestList);
+    setFirstName('');
+    setLastName('');
   }
 
-  // Show whole guest list with GET method
-  useEffect(() => {
-    async function showGuestList() {
-      const response = await fetch(`${baseUrl}/guests`);
-      const data = await response.json();
-      setGuestList(data);
-    }
-    showGuestList().catch((error) => console.log(error));
-  }, []);
+  // Delete guest from the list by DELETE method
+  async function deleteGuestFromList(id) {
+    const response = await fetch(`${baseUrl}/guests/}/${id}`, {
+      method: 'DELETE',
+    });
+    const data = await response.json();
+    const currentGuestList = [...guestList];
+    const newGuestList = currentGuestList.filter(
+      (guest) => guest.id !== data.id,
+    );
+    setGuestList(newGuestList);
+
+    deleteGuestFromList().catch((error) => console.log(error));
+  }
 
   return (
     <div data-test-id="guest">
       <form onSubmit={(event) => event.preventDefault()}>
+        <label htmlFor="FirstName">First name</label>
         <input
           id="FirstName"
           value={firstName}
           onChange={(event) => setFirstName(event.currentTarget.value)}
         />
-        <label htmlFor="FirstName">First name</label>
+        <label htmlFor="LastName">Last name</label>
         <input
           id="LastName"
           value={lastName}
           onChange={(event) => setLastName(event.currentTarget.value)}
           onKeyDown={(event) => {
-            const newGuest = {
-              firstName: firstName,
-              lastName: lastName,
-            };
             if (event.key === 'Enter') {
               addGuestToList();
             }
           }}
         />
-        <label htmlFor="LastName">Last name</label>
 
-        {/* <button
-        onClick={(event) => {
-          const newGuest = {
-            keyId: guests[guests.length - 1].keyId + 1,
-            keyFirstName: firstName,
-            keyLastName: lastName,
-          };
-          const newGuestList = [...guests];
-          newGuestList.push(newGuest);
-          setGuests(newGuestList);
-        }}
-      >
-        {' '}
-        Add Guest
-      </button> */}
+        <button
+          onClick={(event) => {
+            addGuestToList();
+          }}
+        >
+          Add Guest
+        </button>
         <h1>Guest List</h1>
         <div>
           {guestList.map((guest) => {
@@ -87,7 +92,7 @@ export default function App() {
                 <h4>
                   {guest.firstName} {guest.lastName}
                 </h4>
-                <div>Guests ID: {guest.id}</div>
+                <div>Guest ID: {guest.id}</div>
                 <div>
                   <aria-label>
                     {isAttending ? 'attending' : 'not attending'}
@@ -101,6 +106,13 @@ export default function App() {
                     />
                   </aria-label>
                 </div>
+                <button
+                  onClick={(event) => {
+                    deleteGuestFromList(2);
+                  }}
+                >
+                  Remove
+                </button>
               </div>
             );
           })}
