@@ -24,8 +24,9 @@ export default function App() {
       body: JSON.stringify(newGuestInfo),
     });
     const data = await response.json();
-    console.log(data);
-    addGuestToList().catch((error) => console.log(error));
+    const newGuestList = [...guestList];
+    newGuestList.push(data);
+    setGuestList(newGuestList);
   }
 
   // Show whole guest list with GET method
@@ -51,15 +52,15 @@ export default function App() {
           id="LastName"
           value={lastName}
           onChange={(event) => setLastName(event.currentTarget.value)}
-          // onKeyDown={(event) => {
-          //   const newGuest = {
-          //     firstName: firstName,
-          //     lastName: lastName,
-          //   };
-          //   if (event.key === 'Enter') {
-          //     addGuestToList();
-          //   }
-          // }}
+          onKeyDown={(event) => {
+            const newGuest = {
+              firstName: firstName,
+              lastName: lastName,
+            };
+            if (event.key === 'Enter') {
+              addGuestToList();
+            }
+          }}
         />
         <label htmlFor="LastName">Last name</label>
 
