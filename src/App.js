@@ -64,15 +64,12 @@ export default function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ attending: true }),
+      body: JSON.stringify({ attending: setIsAttending }),
     });
     const updatedGuest = await response.json();
     const currentGuestList = [...guestList];
-    // Filter guests by ID
-    const newGuestList = currentGuestList.filter(
-      (guest) => guest.id !== updatedGuest.id,
-    );
-    setGuestList(newGuestList);
+
+    setGuestList(currentGuestList(event.currentTarget.checked));
   }
 
   return (
@@ -118,7 +115,8 @@ export default function App() {
                     type="checkbox"
                     defaultChecked={isAttending}
                     checked={isAttending}
-                    onChange={() => {
+                    onChange={(event) => {
+                      setIsAttending(event.currentTarget.checked);
                       updateGuestFromList(guest.id, guest.attending).catch(
                         (error) => console.log(error),
                       );
@@ -126,11 +124,13 @@ export default function App() {
                       console.log(guest.attending);
                     }}
                   />
+                  <span>{isAttending ? 'attending' : 'not attending'}</span>
                 </div>
-                <span>{isAttending ? 'attending' : 'not attending'}</span>
                 <button
                   onClick={(event) => {
-                    deleteGuestFromList(guest.id);
+                    deleteGuestFromList(guest.id).catch((error) =>
+                      console.log(error),
+                    );
                     console.log(guest.id);
                   }}
                 >
