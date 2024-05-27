@@ -54,7 +54,25 @@ export default function App() {
       (guest) => guest.id !== deletedGuest.id,
     );
     setGuestList(newGuestList);
-    deleteGuestFromList().catch((error) => console.log(error));
+    // deleteGuestFromList().catch((error) => console.log(error));
+  }
+
+  // Update attending status of guest by PUT method
+  async function updateGuestFromList(id, attending) {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: true }),
+    });
+    const updatedGuest = await response.json();
+    const currentGuestList = [...guestList];
+    // Filter guests by ID
+    const newGuestList = currentGuestList.filter(
+      (guest) => guest.id !== updatedGuest.id,
+    );
+    setGuestList(newGuestList);
   }
 
   return (
@@ -73,14 +91,14 @@ export default function App() {
           onChange={(event) => setLastName(event.currentTarget.value)}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              addGuestToList();
+              addGuestToList().catch((error) => console.log(error));
             }
           }}
         />
 
         <button
-          onClick={(event) => {
-            addGuestToList();
+          onClick={() => {
+            addGuestToList().catch((error) => console.log(error));
           }}
         >
           Add Guest
@@ -95,18 +113,21 @@ export default function App() {
                 </h4>
                 <div>Guest ID: {guest.id}</div>
                 <div>
-                  <aria-label>
-                    {isAttending ? 'attending' : 'not attending'}
-                    <input
-                      type="checkbox"
-                      defaultChecked={isAttending}
-                      checked={isAttending}
-                      onChange={(event) =>
-                        setIsAttending(event.currentTarget.checked)
-                      }
-                    />
-                  </aria-label>
+                  <input
+                    aria-label={`${guest.firstName} ${guest.lastName} attending status`}
+                    type="checkbox"
+                    defaultChecked={isAttending}
+                    checked={isAttending}
+                    onChange={() => {
+                      updateGuestFromList(guest.id, guest.attending).catch(
+                        (error) => console.log(error),
+                      );
+                      console.log(guest.id);
+                      console.log(guest.attending);
+                    }}
+                  />
                 </div>
+                <span>{isAttending ? 'attending' : 'not attending'}</span>
                 <button
                   onClick={(event) => {
                     deleteGuestFromList(guest.id);
