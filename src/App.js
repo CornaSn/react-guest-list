@@ -33,26 +33,27 @@ export default function App() {
       },
       body: JSON.stringify(newGuestInfo),
     });
-    const data = await response.json();
+    const createdGuest = await response.json();
     const newGuestList = [...guestList];
-    newGuestList.push(data);
+    newGuestList.push(createdGuest);
     setGuestList(newGuestList);
+    // Remove value from input fields
     setFirstName('');
     setLastName('');
   }
 
   // Delete guest from the list by DELETE method
   async function deleteGuestFromList(id) {
-    const response = await fetch(`${baseUrl}/guests/}/${id}`, {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
-    const data = await response.json();
+    const deletedGuest = await response.json();
     const currentGuestList = [...guestList];
+    //  Filter guests by ID
     const newGuestList = currentGuestList.filter(
-      (guest) => guest.id !== data.id,
+      (guest) => guest.id !== deletedGuest.id,
     );
     setGuestList(newGuestList);
-
     deleteGuestFromList().catch((error) => console.log(error));
   }
 
@@ -108,7 +109,8 @@ export default function App() {
                 </div>
                 <button
                   onClick={(event) => {
-                    deleteGuestFromList(2);
+                    deleteGuestFromList(guest.id);
+                    console.log(guest.id);
                   }}
                 >
                   Remove
