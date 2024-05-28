@@ -1,4 +1,6 @@
+import './App.css';
 import { useEffect, useState } from 'react';
+import styles from './App.module.scss';
 
 const baseUrl = 'http://localhost:4000';
 
@@ -6,7 +8,6 @@ export default function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [isAttending, setIsAttending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Show whole guest list with GET method
@@ -63,72 +64,83 @@ export default function App() {
 
   // Update attending status of guest by PUT method
   async function updateGuestFromList(id, attending) {
+    let oppositeOfAttending;
+    if (attending === true) {
+      oppositeOfAttending = false;
+    } else {
+      oppositeOfAttending = true;
+    }
     const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ attending: attending }),
+      body: JSON.stringify({ attending: oppositeOfAttending }),
     });
     const updatedGuest = await response.json();
     // Create copy of current guest list
-    let currentGuestList = [...guestList];
-    let guestIndex = currentGuestList.findIndex((guest) => guest.id === id);
-    if (guestIndex !== -1) {
-      currentGuestList[guestIndex].attending = updatedGuest.attending;
-    }
-    // Update the state with the modified guest list
-
-    setGuestList(currentGuestList);
+    const newGuestList = [...guestList];
+    setGuestList(newGuestList);
   }
 
   if (isLoading) {
     return <h1> Loading...</h1>;
   }
   return (
-    <div data-test-id="guest">
+    <div className={styles.inputContainer}>
+      <h1>Guest List</h1>
       <form onSubmit={(event) => event.preventDefault()}>
-        <label htmlFor="FirstName">First name</label>
-        <input
-          id="FirstName"
-          value={firstName}
-          onChange={(event) => setFirstName(event.currentTarget.value)}
-        />
-        <label htmlFor="LastName">Last name</label>
-        <input
-          id="LastName"
-          value={lastName}
-          onChange={(event) => setLastName(event.currentTarget.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
+        <div className={styles.guestInput}>
+          <label htmlFor="FirstName">First name</label>
+          <input
+            className={styles.inputField}
+            id="FirstName"
+            value={firstName}
+            placeholder="Enter your first name here..."
+            onChange={(event) => setFirstName(event.currentTarget.value)}
+          />
+          <label htmlFor="LastName">Last name</label>
+          <input
+            className={styles.inputField}
+            id="LastName"
+            value={lastName}
+            placeholder="Enter your last name here..."
+            onChange={(event) => setLastName(event.currentTarget.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                addGuestToList().catch((error) => console.log(error));
+              }
+            }}
+          />
+          <button
+            className={styles.buttonAdd}
+            onClick={() => {
               addGuestToList().catch((error) => console.log(error));
-            }
-          }}
-        />
+            }}
+          >
+            Add Guest
+          </button>
+        </div>
 
-        <button
-          onClick={() => {
-            addGuestToList().catch((error) => console.log(error));
-          }}
-        >
-          Add Guest
-        </button>
-        <h1>Guest List</h1>
         <div>
           {guestList.map((guest) => {
             return (
-              <div key={`guest-${guest.id}`}>
-                <h4>
+              <div
+                className={styles.guestList}
+                key={`guest-${guest.id}`}
+                data-test-id="guest"
+              >
+                <h2>
                   {guest.firstName} {guest.lastName}
-                </h4>
+                </h2>
                 <div>Guest ID: {guest.id}</div>
                 <div>
                   <input
+                    // className={styles.inputField}
                     aria-label={`${guest.firstName} ${guest.lastName} attending status`}
                     type="checkbox"
-                    defaultChecked={isAttending}
-                    checked={isAttending}
-                    onChange={(event) => {
+                    checked={guest.attending}
+                    onChange={() => {
                       updateGuestFromList(guest.id, guest.attending).catch(
                         (error) => console.log(error),
                       );
@@ -136,11 +148,11 @@ export default function App() {
                       console.log(guest.attending);
                     }}
                   />
-                  <span>{isAttending ? 'attending' : 'not attending'}</span>
+                  <span>{guest.attending ? 'attending' : 'not attending'}</span>
                 </div>
                 <button
                   aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
-                  onClick={(event) => {
+                  onClick={() => {
                     deleteGuestFromList(guest.id).catch((error) =>
                       console.log(error),
                     );
