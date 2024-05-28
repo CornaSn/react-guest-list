@@ -78,9 +78,14 @@ export default function App() {
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
     const updatedGuest = await response.json();
+    console.log(updatedGuest);
+    console.log(typeof updatedGuest);
     // Create copy of current guest list
-    const newGuestList = [...guestList];
+    const newGuestList = [...guestList, updatedGuest];
     setGuestList(newGuestList);
+    console.log('-------------');
+    console.log(newGuestList);
+    console.log(typeof newGuestList);
   }
 
   if (isLoading) {
@@ -130,10 +135,6 @@ export default function App() {
                 key={`guest-${guest.id}`}
                 data-test-id="guest"
               >
-                <h2>
-                  {guest.firstName} {guest.lastName}
-                </h2>
-                <div>Guest ID: {guest.id}</div>
                 <div>
                   <input
                     // className={styles.inputField}
@@ -144,12 +145,16 @@ export default function App() {
                       updateGuestFromList(guest.id, guest.attending).catch(
                         (error) => console.log(error),
                       );
-                      console.log(guest.id);
-                      console.log(guest.attending);
+                      // console.log(guest.id);
+                      // console.log(guest.attending);
                     }}
                   />
                   <span>{guest.attending ? 'attending' : 'not attending'}</span>
                 </div>
+                <h2>
+                  {guest.firstName} {guest.lastName}
+                </h2>
+                <div>Guest ID: {guest.id}</div>
                 <button
                   aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
                   onClick={() => {
