@@ -7,6 +7,7 @@ export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isAttending, setIsAttending] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Show whole guest list with GET method
   useEffect(() => {
@@ -14,11 +15,12 @@ export default function App() {
       const response = await fetch(`${baseUrl}/guests`);
       const data = await response.json();
       setGuestList(data);
+      setIsLoading(false);
     }
     showGuestList().catch((error) => console.log(error));
   }, []);
 
-  // Add new guest to List with POST method
+  // Add new guest to list with POST method
   async function addGuestToList() {
     // Variable for the POST request
     const newGuestInfo = {
@@ -44,17 +46,19 @@ export default function App() {
 
   // Delete guest from the list by DELETE method
   async function deleteGuestFromList(id) {
-    const response = await fetch(`${baseUrl}/guests/${id}`, {
-      method: 'DELETE',
-    });
-    const deletedGuest = await response.json();
-    const currentGuestList = [...guestList];
-    //  Filter guests by ID
-    const newGuestList = currentGuestList.filter(
-      (guest) => guest.id !== deletedGuest.id,
-    );
-    setGuestList(newGuestList);
-    // deleteGuestFromList().catch((error) => console.log(error));
+    if (id.length > 0) {
+      const response = await fetch(`${baseUrl}/guests/${id}`, {
+        method: 'DELETE',
+      });
+      const deletedGuest = await response.json();
+      const currentGuestList = [...guestList];
+      //  Filter guests by ID
+      const newGuestList = currentGuestList.filter(
+        (guest) => guest.id !== deletedGuest.id,
+      );
+      setGuestList(newGuestList);
+      // deleteGuestFromList().catch((error) => console.log(error));
+    }
   }
 
   // Update attending status of guest by PUT method
@@ -64,14 +68,23 @@ export default function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ attending: setIsAttending }),
+      body: JSON.stringify({ attending: attending }),
     });
     const updatedGuest = await response.json();
-    const currentGuestList = [...guestList];
+    // Create copy of current guest list
+    let currentGuestList = [...guestList];
+    let guestIndex = currentGuestList.findIndex((guest) => guest.id === id);
+    if (guestIndex !== -1) {
+      currentGuestList[guestIndex].attending = updatedGuest.attending;
+    }
+    // Update the state with the modified guest list
 
-    setGuestList(currentGuestList(event.currentTarget.checked));
+    setGuestList(currentGuestList);
   }
 
+  if (isLoading) {
+    return <h1> Loading...</h1>;
+  }
   return (
     <div data-test-id="guest">
       <form onSubmit={(event) => event.preventDefault()}>
@@ -116,7 +129,6 @@ export default function App() {
                     defaultChecked={isAttending}
                     checked={isAttending}
                     onChange={(event) => {
-                      setIsAttending(event.currentTarget.checked);
                       updateGuestFromList(guest.id, guest.attending).catch(
                         (error) => console.log(error),
                       );
@@ -127,6 +139,7 @@ export default function App() {
                   <span>{isAttending ? 'attending' : 'not attending'}</span>
                 </div>
                 <button
+                  aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
                   onClick={(event) => {
                     deleteGuestFromList(guest.id).catch((error) =>
                       console.log(error),
