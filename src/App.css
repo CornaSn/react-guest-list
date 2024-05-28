@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  height: border-box;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+:root {
+  --container-width: 90rem;
+  --container-padding: 4rem;
+  --border-radius: 3rem;
+  --color-9198e5: #9198e5;
+  --color-af8bda: #af8bda;
+  --color-c87ec7: #c87ec7;
+  --color-db71ae: #db71ae;
+  --color-e66790: #e66790;
+  --color-f36978: #f36978;
+  --color-f7715e: #f7715e;
+  --color-f37e42: #f37e42;
+  --color-ee9920: #ee9920;
+  --color-dab600: #dab600;
+  --color-b8d300: #b8d300;
+  --color-7fee37: #7fee37;
+}
