@@ -136,7 +136,6 @@ export default function App() {
               >
                 <div>
                   <input
-                    // className={styles.inputField}
                     aria-label={`${guest.firstName} ${guest.lastName} attending status`}
                     type="checkbox"
                     checked={guest.attending}
@@ -155,6 +154,7 @@ export default function App() {
                 </h2>
                 <div>Guest ID: {guest.id}</div>
                 <button
+                  className={styles.buttonRemove}
                   aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
                   onClick={() => {
                     deleteGuestFromList(guest.id).catch((error) =>
