@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import { VscChevronRight } from 'react-icons/vsc';
 import styles from './App.module.scss';
 
 const baseUrl = 'http://localhost:4000';
@@ -78,14 +79,12 @@ export default function App() {
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
     const updatedGuest = await response.json();
-    console.log(updatedGuest);
-    console.log(typeof updatedGuest);
-    // Create copy of current guest list
-    const newGuestList = [...guestList, updatedGuest];
+
+    // Create a new guest list with the updated guest
+    const newGuestList = guestList.map((guest) =>
+      guest.id === id ? { ...guest, attending: oppositeOfAttending } : guest,
+    );
     setGuestList(newGuestList);
-    console.log('-------------');
-    console.log(newGuestList);
-    console.log(typeof newGuestList);
   }
 
   if (isLoading) {
