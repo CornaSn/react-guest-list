@@ -80,9 +80,16 @@ export default function App() {
     const updatedGuest = await response.json();
 
     // Create a new guest list with the updated guest
-    const newGuestList = guestList.map((guest) =>
-      guest.id === id ? { ...guest, attending: oppositeOfAttending } : guest,
-    );
+    const newGuestList = guestList.map((guest) => {
+      if (guest.id === id) {
+        return {
+          ...guest,
+          attending: oppositeOfAttending,
+        };
+      }
+      return guest;
+    });
+
     setGuestList(newGuestList);
   }
 
