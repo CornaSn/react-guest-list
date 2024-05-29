@@ -99,14 +99,16 @@ export default function App() {
             className={styles.inputField}
             id="First name"
             value={firstName}
+            disabled={isLoading}
             placeholder="Enter your first name here..."
             onChange={(event) => setFirstName(event.currentTarget.value)}
           />
-          <label htmlFor="Last name">Last name</label>
+          <label htmlFor="LastName">Last name</label>
           <input
             className={styles.inputField}
             id="Last name"
             value={lastName}
+            disabled={isLoading}
             placeholder="Enter your last name here..."
             onChange={(event) => setLastName(event.currentTarget.value)}
             onKeyDown={(event) => {
