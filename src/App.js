@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import styles from './App.module.scss';
 
-const baseUrl = 'http://localhost:4000';
+const baseUrl = 'https://4n5kfr-4000.csb.app';
 
 export default function App() {
   const [guestList, setGuestList] = useState([]);
@@ -15,6 +15,7 @@ export default function App() {
     async function showGuestList() {
       const response = await fetch(`${baseUrl}/guests`);
       const data = await response.json();
+      console.log(data);
       setGuestList(data);
       setIsLoading(false);
     }
@@ -37,8 +38,10 @@ export default function App() {
       body: JSON.stringify(newGuestInfo),
     });
     const createdGuest = await response.json();
-    const newGuestList = [...guestList];
-    newGuestList.push(createdGuest);
+    console.log(createdGuest);
+    const newGuestList = [...guestList, createdGuest];
+    console.log('newguestList', newGuestList);
+    // newGuestList.push(createdGuest);
     setGuestList(newGuestList);
     // Remove value from input fields
     setFirstName('');
@@ -78,6 +81,7 @@ export default function App() {
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
     const updatedGuest = await response.json();
+    console.log(updatedGuest);
 
     // Create a new guest list with the updated guest
     const newGuestList = guestList.map((guest) => {
@@ -91,6 +95,7 @@ export default function App() {
     });
 
     setGuestList(newGuestList);
+    console.log(newGuestList);
   }
 
   if (isLoading) {
@@ -120,64 +125,63 @@ export default function App() {
             onChange={(event) => setLastName(event.currentTarget.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
+                console.log(event.key);
                 addGuestToList().catch((error) => console.log(error));
               }
             }}
           />
-          <button
-            className={styles.buttonAdd}
-            onClick={() => {
-              addGuestToList().catch((error) => console.log(error));
-            }}
-          >
-            Add Guest
-          </button>
-        </div>
-
-        <div>
-          {guestList.map((guest) => {
-            return (
-              <div
-                className={styles.guestList}
-                key={`guest-${guest.id}`}
-                data-test-id="guest"
-              >
-                <div>
-                  <input
-                    aria-label={`${guest.firstName} ${guest.lastName} attending status`}
-                    type="checkbox"
-                    checked={guest.attending}
-                    onChange={() => {
-                      updateGuestFromList(guest.id, guest.attending).catch(
-                        (error) => console.log(error),
-                      );
-                      // console.log(guest.id);
-                      // console.log(guest.attending);
-                    }}
-                  />
-                  <span>{guest.attending ? 'attending' : 'not attending'}</span>
-                </div>
-                <h2>
-                  {guest.firstName} {guest.lastName}
-                </h2>
-                <div>Guest ID: {guest.id}</div>
-                <button
-                  className={styles.buttonRemove}
-                  aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
-                  onClick={() => {
-                    deleteGuestFromList(guest.id).catch((error) =>
-                      console.log(error),
-                    );
-                    console.log(guest.id);
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            );
-          })}
         </div>
       </form>
+      <button
+        className={styles.buttonAdd}
+        onClick={() => {
+          addGuestToList().catch((error) => console.log(error));
+        }}
+      >
+        Add Guest
+      </button>
+      <div>
+        {guestList.map((guest) => {
+          return (
+            <div
+              className={styles.guestList}
+              key={`guest-${guest.id}`}
+              data-test-id="guest"
+            >
+              <div>
+                <input
+                  aria-label={`${guest.firstName} ${guest.lastName} attending status`}
+                  type="checkbox"
+                  checked={guest.attending}
+                  onChange={() => {
+                    updateGuestFromList(guest.id, guest.attending).catch(
+                      (error) => console.log(error),
+                    );
+                    // console.log(guest.id);
+                    // console.log(guest.attending);
+                  }}
+                />
+                <span>{guest.attending ? 'attending' : 'not attending'}</span>
+              </div>
+              <h2>
+                {guest.firstName} {guest.lastName}
+              </h2>
+              <div>Guest ID: {guest.id}</div>
+              <button
+                className={styles.buttonRemove}
+                aria-label={`Remove ${guest.firstName} ${guest.lastName}`}
+                onClick={() => {
+                  deleteGuestFromList(guest.id).catch((error) =>
+                    console.log(error),
+                  );
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
