@@ -115,7 +115,7 @@ export default function App() {
             placeholder="Enter your first name here..."
             onChange={(event) => setFirstName(event.currentTarget.value)}
           />
-          <label htmlFor="LastName">Last name</label>
+          <label htmlFor="Last name">Last name</label>
           <input
             className={styles.inputField}
             id="Last name"
