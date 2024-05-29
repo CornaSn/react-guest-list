@@ -94,18 +94,18 @@ export default function App() {
       <h1>Guest List</h1>
       <form onSubmit={(event) => event.preventDefault()}>
         <div className={styles.guestInput}>
-          <label htmlFor="FirstName">First name</label>
+          <label htmlFor="First name">First name</label>
           <input
             className={styles.inputField}
-            id="FirstName"
+            id="First name"
             value={firstName}
             placeholder="Enter your first name here..."
             onChange={(event) => setFirstName(event.currentTarget.value)}
           />
-          <label htmlFor="LastName">Last name</label>
+          <label htmlFor="Last name">Last name</label>
           <input
             className={styles.inputField}
-            id="LastName"
+            id="Last name"
             value={lastName}
             placeholder="Enter your last name here..."
             onChange={(event) => setLastName(event.currentTarget.value)}
