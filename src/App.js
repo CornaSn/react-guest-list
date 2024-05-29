@@ -77,7 +77,7 @@ export default function App() {
       },
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
-    // const updatedGuest = await response.json();
+    const updatedGuest = await response.json();
 
     // Create a new guest list with the updated guest
     const newGuestList = guestList.map((guest) =>
