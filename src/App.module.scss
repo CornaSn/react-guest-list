@@ -33,7 +33,7 @@ h1 {
   flex-direction: column;
   width: 25rem;
   margin: 2rem;
-  margin-bottom: 5rem;
+  margin-bottom: 1rem;
   padding: 2.5rem 6rem;
   background-color: rgba(0, 0, 0, 0.9);
   border-radius: var(--border-radius);
@@ -64,11 +64,11 @@ h1 {
   padding: 0.8rem 3rem;
   display: flex;
   justify-content: center; //centers the text in the button
-  align-items: center;
   background-color: white;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
   transition: 0.2s ease;
+  margin-bottom: 3rem;
 
   &:hover {
     transform: rotate(0.4deg) scale(1.05);
@@ -79,7 +79,8 @@ h1 {
 
 .guestList {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  width: 42rem;
   align-items: center;
   border-bottom: 1px solid #abdbe373;
   padding: 0.6rem 1rem;
@@ -94,9 +95,10 @@ h1 {
   div {
     flex: 1;
     font-size: 0.8rem;
+    text-transform: uppercase;
   }
   input[type='checkbox'] {
-    margin-right: 1rem; // Space next to Checkboxes
+    margin-right: 0.5rem; // Space next to Checkboxes
   }
 }
 
