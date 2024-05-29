@@ -1,6 +1,5 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { VscChevronRight } from 'react-icons/vsc';
 import styles from './App.module.scss';
 
 const baseUrl = 'http://localhost:4000';
@@ -78,7 +77,7 @@ export default function App() {
       },
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
-    const updatedGuest = await response.json();
+    // const updatedGuest = await response.json();
 
     // Create a new guest list with the updated guest
     const newGuestList = guestList.map((guest) =>
