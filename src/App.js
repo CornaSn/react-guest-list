@@ -15,7 +15,6 @@ export default function App() {
     async function showGuestList() {
       const response = await fetch(`${baseUrl}/guests`);
       const data = await response.json();
-      console.log(data);
       setGuestList(data);
       setIsLoading(false);
     }
@@ -38,9 +37,7 @@ export default function App() {
       body: JSON.stringify(newGuestInfo),
     });
     const createdGuest = await response.json();
-    console.log(createdGuest);
     const newGuestList = [...guestList, createdGuest];
-    console.log('newguestList', newGuestList);
     // newGuestList.push(createdGuest);
     setGuestList(newGuestList);
     // Remove value from input fields
@@ -81,7 +78,6 @@ export default function App() {
       body: JSON.stringify({ attending: oppositeOfAttending }),
     });
     const updatedGuest = await response.json();
-    console.log(updatedGuest);
 
     // Create a new guest list with the updated guest
     const newGuestList = guestList.map((guest) => {
@@ -95,7 +91,6 @@ export default function App() {
     });
 
     setGuestList(newGuestList);
-    console.log(newGuestList);
   }
 
   if (isLoading) {
@@ -125,7 +120,6 @@ export default function App() {
             onChange={(event) => setLastName(event.currentTarget.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                console.log(event.key);
                 addGuestToList().catch((error) => console.log(error));
               }
             }}
@@ -157,8 +151,6 @@ export default function App() {
                     updateGuestFromList(guest.id, guest.attending).catch(
                       (error) => console.log(error),
                     );
-                    // console.log(guest.id);
-                    // console.log(guest.attending);
                   }}
                 />
                 <span>{guest.attending ? 'attending' : 'not attending'}</span>
