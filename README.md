@@ -43,9 +43,3 @@ Some features are similar to [this example](https://todomvc.com/examples/react/d
 - [ ] Convert your frontend code to TypeScript (see [Adding TypeScript](https://create-react-app.dev/docs/adding-typescript/))
 - [ ] Create a favicon that identifies your app: (see [Generating and Adding Favicons](https://learn.upleveled.io/pern-extensive-immersive/modules/cheatsheet-design-ux/#generating-and-adding-favicons))
 - [ ] Right after [creating your first (empty) Git commit](https://learn.upleveled.io/pern-extensive-immersive/modules/cheatsheet-command-line/#5-create-and-push-an-initial-commit), create a new branch. Use this branch to [open a pull request on GitHub](https://learn.upleveled.io/pern-extensive-immersive/modules/cheatsheet-git-github/#opening-pull-requests)
-
-## Acceptance Criteria
-
-- [ ] Preflight runs without errors in your project
-- [ ] [Drone bot](https://learn.upleveled.io/pern-extensive-immersive/modules/cheatsheet-tasks/#upleveled-drone) has been tagged and responded with a passing message
-- [ ] Correct GitHub commit message format (see [Writing Commit Messages](https://learn.upleveled.io/pern-extensive-immersive/modules/cheatsheet-git-github/#writing-commit-messages))
