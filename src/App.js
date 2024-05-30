@@ -46,7 +46,7 @@ export default function App() {
 
   // Delete guest from the list by DELETE method
   async function deleteGuestFromList(id) {
-    if (id.length >= 0) {
+    if (id.length > 0) {
       const response = await fetch(`${baseUrl}/guests/${id}`, {
         method: 'DELETE',
       });
