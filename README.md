@@ -19,12 +19,6 @@ Open my site [here](https://latest-version-react-guest-list.netlify.app/)
 - React
 - Sass
 
-## Setup
-- Clone or download the repository
-- Run pnpm start in the terminal
-  - This opens the Server http://localhost:3000 in your browser
-- Set up [this API](https://github.com/upleveled/express-guest-list-api-memory-data-store) and read the docs to understand how you can use it to store and retrieve data
-
 ##  Credits
 This is a React project I completed during the PERN-extensive (Immersive) Spring 2024 bootcamp at [UpLeveled](https://github.com/upleveled) 
 
